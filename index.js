@@ -96,6 +96,10 @@ Strategy.prototype.processResponse = function (req) {
     if (response.status === '410') return this.fail();
     else return this.error(new Error(message));
   } else if (response.status === '200') {
+    // immitate openid to work with loopback passport module
+    response.ravenid = response.id;
+    response.id = response.principal;
+    
     var interval = (now() + this.clockOffset) - parseDate(response.issue);
     if (interval < 0) interval = -interval;
 
